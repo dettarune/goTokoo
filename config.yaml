@@ -1,0 +1,11 @@
+database:
+  username: "detarune"
+  password: "passwordbaru"
+  host:
+  name: goTokoo
+  port:
+  "pool": {
+      "idle": 10,
+      "max": 100,
+      "lifetime": 300
+    }
