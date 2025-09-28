@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"github.com/dettarune/goTokoo/config"
+	"github.com/dettarune/goTokoo/internal/config"
 	"github.com/dettarune/goTokoo/internal/infrastructure/router"
 )
 
