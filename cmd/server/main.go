@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/dettarune/goTokoo/internal/config"
-	"github.com/dettarune/goTokoo/internal/infrastructure/router"
 )
 
 
@@ -20,17 +19,18 @@ func main(){
 	db := config.NewDatabase(viperConfig, logrus)
 	validator := config.NewValidator(viperConfig)
 
-	appConfig := &config.BootstrapConfig{
+
+	bootstrap := &config.BootstrapConfig{
 		DB: db,
 		Log: logrus,
-		Config: viperConfig,
 		Validator: validator,
+		Config: viperConfig,
 	}
 
-	router := router.NewRouter(appConfig)
+	app := config.NewServer(bootstrap)
 
 	logrus.Infof("Server Running at http://%s", address)
-	err := http.ListenAndServe(address, router)
+	err := http.ListenAndServe(address, app)
 	if err != nil {
 		logrus.Fatalf("Failed To Start Server: %v", err)
 	}

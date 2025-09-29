@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/dettarune/goTokoo/internal/entity"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -22,6 +23,8 @@ func NewDatabase(viper *viper.Viper, log *logrus.Logger) *gorm.DB {
 
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+
 		Logger: logger.New(&logrusWriter{Logger: log}, logger.Config{
 			SlowThreshold:             time.Second * 5,
 			Colorful:                  false,
@@ -32,6 +35,11 @@ func NewDatabase(viper *viper.Viper, log *logrus.Logger) *gorm.DB {
 	})
 	if err != nil {
 		log.Fatalf("failed to connect database: %v", err)
+	}
+
+	err = db.AutoMigrate(entity.User{})
+	if err != nil {
+		log.Fatalf("failed to migrate database: %v", err)
 	}
 
 	return db
